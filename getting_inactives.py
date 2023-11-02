@@ -1,5 +1,4 @@
 from playwright.sync_api import sync_playwright
-import requests
 import pandas as pd
 from bs4 import BeautifulSoup
 from time import sleep
@@ -51,18 +50,21 @@ with sync_playwright() as p:
             for w in infos_part_2:
                 print(w.text_content())
 
-            inactive['Company'] = company
-            inactive['Name'] = infos_part_1[0].text_content()
-            inactive['Title'] = infos_part_1[1].text_content()
-            inactive['Email'] = infos_part_2[0].text_content()
-            inactive['Address 1'] = infos_part_1[2].text_content()
-            inactive['Address 2'] = infos_part_1[3].text_content()
-            inactive['Address 3'] = infos_part_1[4].text_content()
-            inactive['Phone'] = infos_part_2[1].text_content().replace("Phone: ", "")
-            
-            list_of_inactives.append(inactive)
-            df = pd.DataFrame(list_of_inactives)
-            df.to_excel('inactives.xlsx', index=False)
+            try:
+                inactive['Company'] = company
+                inactive['Name'] = infos_part_1[0].text_content()
+                inactive['Title'] = infos_part_1[1].text_content()
+                inactive['Email'] = infos_part_2[0].text_content()
+                inactive['Address 1'] = infos_part_1[2].text_content()
+                inactive['Address 2'] = infos_part_1[3].text_content()
+                inactive['Address 3'] = infos_part_1[4].text_content()
+                inactive['Phone'] = infos_part_2[1].text_content().replace("Phone: ", "")
+                
+                list_of_inactives.append(inactive)
+                df = pd.DataFrame(list_of_inactives)
+                df.to_excel('inactives.xlsx', index=False)
+            except:
+                pass
 
             page2.close()
 
